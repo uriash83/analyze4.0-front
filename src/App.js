@@ -1,26 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter , Switch , HashRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import {authCheckState} from './store/actions/auth'
+import {factorsGet} from './store/actions/factorsActions';
+import Header from './containers/Header';
+import BaseRouter from './routes'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  
+  componentDidMount() {
+    this.props.onTryAutoSignup()
+  }
+  
+  render(){
+    return (
+      <div className="App">
+        <BrowserRouter>
+         
+        <Header/>
+            <Switch>
+              
+            <BaseRouter/>
+            
+            </Switch> 
+        </BrowserRouter>     
+      </div>
+    );
+  }
+  
 }
 
-export default App;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onTryAutoSignup: () => dispatch(authCheckState()),
+    getAllFactors: () => dispatch(factorsGet()) 
+  }
+}
+
+export default connect(null, mapDispatchToProps)(App);
+
